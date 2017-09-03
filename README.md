@@ -1,2 +1,3 @@
-# myJavascriptDiary
-我的javascript学习日记
+# learngit
+this is my first tryGit.
+
