@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{margin:0;padding:0; }
+        .newdiv{
+            width:20px;
+            background-color:#66ffcc;
+            border-radius:3px;
+            float:left;
+            margin-left:10px;
+            color:white;
+            text-align:center;
+        }
+        .showField{
+            width:300px;
+        }
+    </style>
+</head>
+<body>
+<input type="text" id="ipt">
+<input type="button" value="添加" onclick="addNum()" id="add">
+<input type="button" value="左加" onclick="placeLeft()" id="left">
+<input type="button" value="右加" onclick="placeRight()" id="right">
+<input type="button" value="排序" onclick="sortNum()" id="sort">
+<input type="button" value="重置" onclick="removeAll()" id="remove">
+<div class="showField" id="showField"></div>
+<script type="text/javascript">
+    var ipt = document.getElementById("ipt");
+    function addNum() {
+        var iptVal = parseInt(ipt.value, 10),
+            oldDiv = document.getElementById("showField"),
+            maxLength = document.getElementById("showField").children.length,
+            specialHeight = 110;
+        //判断展示区的数字是否超过60限制
+        if(maxLength>=20){
+            alert("最多输入20个数字");
+            return false;
+        }
+        //输入的内容是否是在10到100以内的数字
+        if(typeof iptVal === 'number'){
+            console.log(iptVal);
+            if(iptVal>=10 && iptVal<=100){
+                var newDiv = document.createElement("div");
+                newDiv.setAttribute("class", "newdiv");
+                newDiv.setAttribute("onclick", "clickToDel(this)");
+                newDiv.style.height = iptVal + "px";
+                var marginTop = specialHeight - iptVal;
+                newDiv.style.marginTop = marginTop + "px";
+                oldDiv.appendChild(newDiv);
+            }else{
+                alert("请输入10到100以内的数字");
+                ipt.value = "";
+            }
+        }else{
+            alert("请输入数字");
+            ipt.value = "";
+        }
+        ipt.focus();
+    }
+    function clickToDel(item) {
+        var par = item.parentNode;
+        par.removeChild(item);
+    }
+    function placeLeft() {
+        var iptVal = parseInt(ipt.value, 10),
+            oldDiv = document.getElementById("showField"),
+            maxLength = document.getElementById("showField").children.length,
+            specialHeight = 110;
+        //判断展示区的数字是否超过60限制
+        if(maxLength>=20){
+            alert("最多输入20个数字");
+            return false;
+        }
+        var newDiv = document.createElement("div");
+        newDiv.setAttribute("class", "newdiv");
+        newDiv.setAttribute("onclick", "clickToDel(this)");
+        var fNode = oldDiv.firstChild;
+        //使用insertBefore时应该注意一点，被插入的这个节点会变成参照节点的前一个通报节点，同时被方法返回
+        //所以一定要让这个返回值有一个名字，但是这个返回值实际上还是那个被插入的节点
+        var returnNode = oldDiv.insertBefore(newDiv, fNode);
+        returnNode.style.height = iptVal + "px";
+        returnNode.style.marginTop = specialHeight - iptVal + "px"
+    }
+    function placeRight() {
+        var iptVal = parseInt(ipt.value, 10),
+            oldDiv = document.getElementById("showField"),
+            maxLength = document.getElementById("showField").children.length,
+            specialHeight = 110;
+        //判断展示区的数字是否超过60限制
+        if(maxLength>=20){
+            alert("最多输入20个数字");
+            return false;
+        }
+        var newDiv = document.createElement("div");
+        newDiv.setAttribute("class", "newdiv");
+        newDiv.setAttribute("onclick", "clickToDel(this)");
+        newDiv = oldDiv.appendChild(newDiv);
+        newDiv.style.height = iptVal + "px";
+        newDiv.style.marginTop = specialHeight - iptVal + "px";
+    }
+    function sortNum() {
+        var oldDiv = document.getElementById("showField");
+        var innerDiv = oldDiv.children;
+        var arr = [];
+        var specialHeight = 110;
+        for(var i = 0; i<innerDiv.length; i++){
+            arr[i] = innerDiv[i].offsetHeight;
+        }
+        //升序排列
+        arr.sort(function (a, b) {
+            return a-b;
+        });
+        for(var j = 0; j<innerDiv.length; j++ ){
+            innerDiv[j].style.height = arr[j] + "px";
+            innerDiv[j].style.marginTop = specialHeight - arr[j] + "px";
+
+        }
+    }
+    function removeAll() {
+        var oldDiv = document.getElementById("showField"),
+            innerDiv = oldDiv.childNodes;
+        //第一种办法
+//        while(oldDiv.firstChild){
+//            oldDiv.removeChild(oldDiv.firstChild);
+//        }
+        //第二种办法
+//        oldDiv.innerHTML = "";
+        //第三种办法
+        for(var i = innerDiv.length - 1; i >= 0; i--) {
+            oldDiv.removeChild(oldDiv.lastChild);
+        }
+
+    }
+</script>
+</body>
+</html>
